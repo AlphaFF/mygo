@@ -2,7 +2,7 @@
 * @Author: alpha
 * @Date:   2018-09-17 10:31:44
 * @Last Modified by:   AlphaFF
-* @Last Modified time: 2018-09-19 17:31:29
+* @Last Modified time: 2018-09-20 16:39:16
  */
 
 // package main
@@ -103,7 +103,7 @@
 // 	return result
 // }
 
-package main
+package test
 
 import (
 	"fmt"
