@@ -50,6 +50,34 @@ func (r Rectangle) Area() float32 {
 	return r.width * r.height
 }
 
+type stockPosition struct {
+	ticker     string
+	sharePrice float32
+	count      float32
+}
+
+func (s stockPosition) getValue() float32 {
+	return s.sharePrice * s.count
+}
+
+type car struct {
+	make  string
+	model string
+	price float32
+}
+
+func (c car) getValue() float32 {
+	return c.price
+}
+
+type valuable interface {
+	getValue() float32
+}
+
+func showValue(asset valuable) {
+	fmt.Println("values of the asset is %f", asset.getValue())
+}
+
 func main() {
 	fmt.Println("hahaha..")
 	switch a := 2; {
@@ -80,4 +108,8 @@ func main() {
 		fmt.Println("shapes detail:", shapes[n])
 		fmt.Println("shape is :", shapes[n].Area())
 	}
+	var o valuable = stockPosition{"Good", 577.20, 4}
+	showValue(o)
+	o = car{"bwm", "m3", 66500}
+	showValue(o)
 }
