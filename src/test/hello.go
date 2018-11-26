@@ -106,8 +106,6 @@
 package test
 
 import (
-	"fmt"
-	"runtime"
 	// "reflect"
 	"strconv"
 )
@@ -124,111 +122,111 @@ func (p Person) String() string {
 	return "(name:)" + p.name + "-age:" + strconv.Itoa(p.age) + "years"
 }
 
-func main() {
-	// list := make(List, 3)
-	// list[0] = 1
-	// list[1] = "hello"
-	// list[2] = Person{"Jhon", 70}
-	// for index, element := range list {
-	// 	if value, ok := element.(int); ok {
-	// 		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
-	// 	} else if value, ok := element.(string); ok {
-	// 		fmt.Printf("list[%d] is an string and its value is %s\n", index, value)
-	// 	} else if value, ok := element.(Person); ok {
-	// 		fmt.Printf("list[%d] is an Person and its value is %s\n", index, value)
-	// 	} else {
-	// 		fmt.Printf("list[%d] is a different type\n", index)
-	// 	}
-	// }
-	// for index, ele := range list {
-	// 	switch value := ele.(type) {
-	// 	case int:
-	// 		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
-	// 	case string:
-	// 		fmt.Printf("list[%d] is an string and its value is %s\n", index, value)
-	// 	case Person:
-	// 		fmt.Printf("list[%d] is an Person and its value is %s\n", index, value)
-	// 	default:
-	// 		fmt.Printf("list[%d] is a different type\n", index)
-	// 	}
-	// }
-	// var x float64 = 3.4
-	// v := reflect.ValueOf(x)
-	// fmt.Println("type:", v.Type())
-	// fmt.Println(v.Kind() == reflect.Float64)
-	// fmt.Println(v.Float())
+// func main() {
+// 	// list := make(List, 3)
+// 	// list[0] = 1
+// 	// list[1] = "hello"
+// 	// list[2] = Person{"Jhon", 70}
+// 	// for index, element := range list {
+// 	// 	if value, ok := element.(int); ok {
+// 	// 		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
+// 	// 	} else if value, ok := element.(string); ok {
+// 	// 		fmt.Printf("list[%d] is an string and its value is %s\n", index, value)
+// 	// 	} else if value, ok := element.(Person); ok {
+// 	// 		fmt.Printf("list[%d] is an Person and its value is %s\n", index, value)
+// 	// 	} else {
+// 	// 		fmt.Printf("list[%d] is a different type\n", index)
+// 	// 	}
+// 	// }
+// 	// for index, ele := range list {
+// 	// 	switch value := ele.(type) {
+// 	// 	case int:
+// 	// 		fmt.Printf("list[%d] is an int and its value is %d\n", index, value)
+// 	// 	case string:
+// 	// 		fmt.Printf("list[%d] is an string and its value is %s\n", index, value)
+// 	// 	case Person:
+// 	// 		fmt.Printf("list[%d] is an Person and its value is %s\n", index, value)
+// 	// 	default:
+// 	// 		fmt.Printf("list[%d] is a different type\n", index)
+// 	// 	}
+// 	// }
+// 	// var x float64 = 3.4
+// 	// v := reflect.ValueOf(x)
+// 	// fmt.Println("type:", v.Type())
+// 	// fmt.Println(v.Kind() == reflect.Float64)
+// 	// fmt.Println(v.Float())
 
-	// p := reflect.Valueof(&x)
-	// v := p.Elem()
-	// v.setFloat(7.1)
-	// fmt.Println(v, x)
+// 	// p := reflect.Valueof(&x)
+// 	// v := p.Elem()
+// 	// v.setFloat(7.1)
+// 	// fmt.Println(v, x)
 
-	// go say("world")
-	// say("hello")
+// 	// go say("world")
+// 	// say("hello")
 
-	// a := []int{7, 2, 8, -9, 4, 0}
-	// c := make(chan int, 2)
-	// go sum(a[:len(a)/2], c)
-	// go sum(a[len(a)/2:], c)
-	// x, y := <-c, <-c
-	// fmt.Println(x, y, x+y)
+// 	// a := []int{7, 2, 8, -9, 4, 0}
+// 	// c := make(chan int, 2)
+// 	// go sum(a[:len(a)/2], c)
+// 	// go sum(a[len(a)/2:], c)
+// 	// x, y := <-c, <-c
+// 	// fmt.Println(x, y, x+y)
 
-	// c := make(chan int, 2)
-	// c <- 1
-	// c <- 2
-	// fmt.Println(<-c)
-	// fmt.Println(<-c)
+// 	// c := make(chan int, 2)
+// 	// c <- 1
+// 	// c <- 2
+// 	// fmt.Println(<-c)
+// 	// fmt.Println(<-c)
 
-	// c := make(chan int)
-	// go fibonacci(10, c)
-	// for i := range c {
-	// 	fmt.Println(i)
-	// }
+// 	// c := make(chan int)
+// 	// go fibonacci(10, c)
+// 	// for i := range c {
+// 	// 	fmt.Println(i)
+// 	// }
 
-	c := make(chan int)
-	quit := make(chan int)
-	go func() {
-		for i := 0; i < 10; i++ {
-			fmt.Println(<-c)
-		}
-		quit <- 0
-	}()
-	fibonacci(c, quit)
-}
-
-func say(s string) {
-	for i := 0; i < 5; i++ {
-		runtime.Gosched()
-		fmt.Println(s)
-	}
-}
-
-func sum(a []int, c chan int) {
-	total := 0
-	for _, v := range a {
-		total += v
-	}
-	c <- total
-}
-
-// func fibonacci(n int, c chan int) {
-// 	x, y := 1, 1
-// 	for i := 0; i < n; i++ {
-// 		c <- x
-// 		x, y = y, x+y
-// 	}
-// 	close(c)
+// 	c := make(chan int)
+// 	quit := make(chan int)
+// 	go func() {
+// 		for i := 0; i < 10; i++ {
+// 			fmt.Println(<-c)
+// 		}
+// 		quit <- 0
+// 	}()
+// 	fibonacci(c, quit)
 // }
 
-func fibonacci(c, quit chan int) {
-	x, y := 1, 1
-	for {
-		select {
-		case c <- x:
-			x, y = y, x+y
-		case <-quit:
-			fmt.Println("quit")
-			return
-		}
-	}
-}
+// func say(s string) {
+// 	for i := 0; i < 5; i++ {
+// 		runtime.Gosched()
+// 		fmt.Println(s)
+// 	}
+// }
+
+// func sum(a []int, c chan int) {
+// 	total := 0
+// 	for _, v := range a {
+// 		total += v
+// 	}
+// 	c <- total
+// }
+
+// // func fibonacci(n int, c chan int) {
+// // 	x, y := 1, 1
+// // 	for i := 0; i < n; i++ {
+// // 		c <- x
+// // 		x, y = y, x+y
+// // 	}
+// // 	close(c)
+// // }
+
+// func fibonacci(c, quit chan int) {
+// 	x, y := 1, 1
+// 	for {
+// 		select {
+// 		case c <- x:
+// 			x, y = y, x+y
+// 		case <-quit:
+// 			fmt.Println("quit")
+// 			return
+// 		}
+// 	}
+// }

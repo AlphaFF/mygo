@@ -1,45 +1,10 @@
-/*
-* @Author: AlphaFF
-* @Date:   2018-09-20 16:30:19
-* @Last Modified by:   AlphaFF
-* @Last Modified time: 2018-11-06 17:37:02
- */
-
-// package main
-
-// import (
-//  "fmt"
-//  "log"
-//  "net/http"
-//  "strings"
-// )
-
-// func sayHelloName(w http.ResponseWriter, r *http.Request) {
-//  r.ParseForm()
-//  fmt.Println(r.Form)
-//  fmt.Println("path", r.URL.Path)
-//  fmt.Println("scheme", r.URL.Scheme)
-//  // fmt.Println(r.Form("url_long"))
-//  for k, v := range r.Form {
-//      fmt.Println("key:", k)
-//      fmt.Println("val:", strings.Join(v, ""))
-//  }
-//  fmt.Fprintf(w, "Hello world...")
-// }
-
-// func main() {
-//  http.HandleFunc("/", sayHelloName)
-//  err := http.ListenAndServe(":9090", nil)
-//  if err != nil {
-//      log.Fatal("ListenAndServer:", err)
-//  }
-// }
-
 package main
 
 import (
 	"fmt"
 	"math"
+	"reflect"
+	// "time"
 )
 
 // type person struct {
@@ -79,6 +44,37 @@ type Circle struct {
 
 type Shaper interface {
 	Area() float32
+}
+
+type any interface{}
+
+type specialString string
+
+var whatIsThis specialString = "hello"
+
+func TypeSwitch() {
+	testFunc := func(any interface{}) {
+		switch v := any.(type) {
+		case bool:
+			fmt.Println("bool", v)
+		case int:
+			fmt.Println("int", v)
+		case float32:
+			fmt.Println("float32", v)
+		case string:
+			fmt.Println("string", v)
+		case specialString:
+			fmt.Println("specialString", v)
+		default:
+			fmt.Println("unknown type", v)
+		}
+	}
+	testFunc(whatIsThis)
+}
+
+type T struct {
+	A int
+	B string
 }
 
 func main() {
@@ -122,12 +118,42 @@ func main() {
 	case *Square:
 		fmt.Println("square is:", t)
 	case *Circle:
-		fmt.Println("circle is:", c)
+		fmt.Println("circle is:", t)
 	case nil:
 		fmt.Println("nothing")
 	default:
 		fmt.Println("unexpected type")
 	}
+
+	TypeSwitch()
+	fmt.Println(reflect.TypeOf(sq1))
+	fmt.Println(reflect.ValueOf(sq1))
+	var x float64 = 3.4
+	v := reflect.ValueOf(&x)
+	v = v.Elem()
+	fmt.Println(v.CanSet())
+	v.SetFloat(3.1415)
+	fmt.Println(v)
+
+	t := T{23, "skido"}
+	s := reflect.ValueOf(&t).Elem()
+	typeOfT := s.Type()
+	for i := 0; i < s.NumField(); i++ {
+		f := s.Field(i)
+		fmt.Println(i, typeOfT.Field(i).Name, f.Type(), f.Interface())
+	}
+	s.Field(0).SetInt(77)
+	s.Field(1).SetString("sunset strip")
+	fmt.Println("t is now", t)
+
+	ch := make(chan string, 5)
+	go sendData(ch)
+	// go getData(ch)
+	for {
+		fmt.Println(<-ch)
+	}
+
+	// time.Sleep(1e9)
 }
 
 func (sq *Square) Area() float32 {
@@ -136,4 +162,18 @@ func (sq *Square) Area() float32 {
 
 func (c *Circle) Area() float32 {
 	return c.radius * c.radius * math.Pi
+}
+
+func sendData(ch chan string) {
+	ch <- "washington"
+	ch <- "Tripoli"
+	ch <- "london"
+	ch <- "beijing"
+	ch <- "tokio"
+}
+
+func getData(ch chan string) {
+	for {
+		fmt.Println(<-ch)
+	}
 }
