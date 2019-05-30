@@ -1,179 +1,287 @@
-package main
+// /*
+// * @Author: AlphaFF
+// * @Date:   2018-11-26 20:16:27
+// * @Last Modified by:   wangfeng1
+// * @Last Modified time: 2018-12-25 19:30:42
+//  */
 
-import (
-	"fmt"
-	"math"
-	"reflect"
-	// "time"
-)
+// package main
 
-// type person struct {
-// 	name string
-// 	age  int
-// }
+// import (
+// 	"fmt"
+// 	"math"
+// 	"runtime"
+// 	"strconv"
+// 	// "time"
+// 	"strings"
+// )
 
-// func Older(p1, p2 person) (person, int) {
-// 	if p1.age > p2.age {
-// 		return p1, p1.age - p2.age
-// 	}
-// 	return p2, p2.age - p1.age
-// }
+// // type Student struct {
+// // 	name string
+// // 	age  int
+// // }
 
-// type Skills []string
+// const (
+// 	B float64 = 1 << (iota * 10)
+// 	KB
+// 	MB
+// 	GB
+// )
+
+// // type S struct{}
 
 // type Human struct {
-// 	name   string
-// 	age    int
-// 	weight int
+// 	name  string
+// 	age   int
+// 	phone string
 // }
 
 // type Student struct {
 // 	Human
-// 	Skills
-// 	int
 // 	school string
+// 	loan   float32
 // }
 
-type Square struct {
-	side float32
-}
+// type Employee struct {
+// 	Human
+// 	company string
+// 	money   float32
+// }
 
-type Circle struct {
-	radius float32
-}
+// func (h *Human) SayHi() {
+// 	fmt.Println("name is: %s, and age is:  %s", h.name, h.age)
+// }
 
-type Shaper interface {
-	Area() float32
-}
+// func (h *Human) Sing(lyric string) {
+// 	fmt.Println("lalala", lyric)
+// }
 
-type any interface{}
+// func (h *Human) Guzzle(beerStein string) {
+// 	fmt.Println("Guzzle", beerStein)
+// }
 
-type specialString string
+// func (e *Employee) SayHi() {
+// 	fmt.Println("company is %s, money is %s", e.company, e.money)
+// }
 
-var whatIsThis specialString = "hello"
+// func (s *Student) BorrowMoney(amount float32) {
+// 	s.loan += amount
+// }
 
-func TypeSwitch() {
-	testFunc := func(any interface{}) {
-		switch v := any.(type) {
-		case bool:
-			fmt.Println("bool", v)
-		case int:
-			fmt.Println("int", v)
-		case float32:
-			fmt.Println("float32", v)
-		case string:
-			fmt.Println("string", v)
-		case specialString:
-			fmt.Println("specialString", v)
-		default:
-			fmt.Println("unknown type", v)
-		}
-	}
-	testFunc(whatIsThis)
-}
+// func (e *Employee) SpendSalary(amount float32) {
+// 	e.money -= amount
+// }
 
-type T struct {
-	A int
-	B string
-}
+// type Men interface {
+// 	SayHi()
+// 	Sing(lyrics string)
+// 	Guzzle(beerStein string)
+// }
 
-func main() {
-	// for i := 0; i < 5; i++ {
-	//  fmt.Println(i, &i)
-	// }
-	// var P person
-	// P.name = "zhangsan"
-	// P.age = 24
-	// fmt.Println(P.name, P.age)
+// type YoungChap interface {
+// 	SayHi()
+// 	Sing(song string)
+// 	BorrowMoney(amount float32)
+// }
 
-	// T := person{"tom", 18}
-	// fmt.Println(T.name, T.age)
+// type ElderlyGent interface {
+// 	SayHi()
+// 	Sing(song string)
+// 	SpendSalary(amount float32)
+// }
 
-	// S := person{name: "lisi", age: 10}
-	// fmt.Println(S.name)
+// type Element interface{}
+// type List []Element
 
-	// Q := new(person)
-	// fmt.Println(Q)
+// type Person struct {
+// 	name string
+// 	age  int
+// }
 
-	// bp_older, bp_diff := Older(P, T)
-	// fmt.Println(bp_older, bp_diff)
+// func (p Person) String() string {
+// 	return "(name: " + p.name + " - age: " + strconv.Itoa(p.age) + " years)"
+// }
 
-	// mark := Student{Human{"mark", 24, 170}, "peking university"}
-	// fmt.Println(mark, mark.name)
-	fmt.Println("hello world")
-	var areaIntf Shaper
-	sq1 := new(Square)
-	sq1.side = 5
+// func main() {
+// 	// fmt.Println("hello world..")
+// 	// jack := Student{"张三", 24}
+// 	// fmt.Println(jack)
+// 	// fmt.Println(KB)
+// 	fmt.Println(math.Pi)
+// 	a := 1
+// 	a++
+// 	var p *int
+// 	p = &a
+// 	fmt.Println(*p)
+// 	// b := 10
+// 	// if b := 5; b > 2 {
+// 	// 	fmt.Println(b)
+// 	// }
+// 	// fmt.Println(b)
+// 	// for {
+// 	// 	b--
+// 	// 	if b < 3 {
+// 	// 		break
+// 	// 	}
+// 	// 	fmt.Println(b)
+// 	// }
+// 	// for i := 0; i < 3; i++ {
+// 	// 	b++
+// 	// 	fmt.Println(b)
+// 	// }
+// 	// fmt.Println("over...")
 
-	// areaIntf = sq1
-	// if t, ok := areaIntf.(*Square); ok {
-	// 	fmt.Println("t is:", t)
-	// }
-	// if u, ok := areaIntf.(*Circle); ok {
-	// 	fmt.Println("u is:", u)
-	// } else {
-	// 	fmt.Println("don't contain type circle")
-	// }
-	switch t := areaIntf.(type) {
-	case *Square:
-		fmt.Println("square is:", t)
-	case *Circle:
-		fmt.Println("circle is:", t)
-	case nil:
-		fmt.Println("nothing")
-	default:
-		fmt.Println("unexpected type")
-	}
+// 	switch c := 1; {
+// 	case c >= 0:
+// 		fmt.Println("c==0")
+// 		fallthrough
+// 	case c >= 1:
+// 		fmt.Println("c==1")
+// 	default:
+// 		fmt.Println("c not exist.")
+// 	}
+// 	d := make(map[string]int)
+// 	fmt.Println(d)
+// 	d["1"] = 2
+// 	d["2"] = 4
+// 	d["3"] = 9
+// 	fmt.Println(d)
+// 	for k := range d {
+// 		fmt.Println(k, d[k])
+// 	}
+// 	delete(d, "3")
+// 	fmt.Println(d)
+// 	eyExist, ok := d["4"]
+// 	if ok {
+// 		fmt.Println("4 is ", eyExist)
+// 	} else {
+// 		fmt.Println("4 in not in d")
+// 	}
+// 	// pa := Student{"lisi", 25}
+// 	// var pt *Student
+// 	// pt = &pa
+// 	// fmt.Println(pt.name, pt.age)
+// 	list := make(List, 3)
+// 	fmt.Println(list)
+// 	list[0] = 1
+// 	list[1] = "hello"
+// 	list[2] = Person{"devi", 70}
+// 	for index, element := range list {
+// 		// if value, ok := element.(int); ok {
+// 		// 	fmt.Println("this element is int", index, value)
+// 		// } else if value, ok := element.(string); ok {
+// 		// 	fmt.Println("this element is string", index, value)
+// 		// } else if value, ok := element.(Person); ok {
+// 		// 	fmt.Println("this element is Person", index, value)
+// 		// } else {
+// 		// 	fmt.Println("this element is not any of int, string, Person")
+// 		// }
+// 		switch value := element.(type) {
+// 		case int:
+// 			fmt.Println("this element is int", index, value)
+// 		case string:
+// 			fmt.Println("this element is string", index, value)
+// 		case Person:
+// 			fmt.Println("this element is Person", index, value)
+// 		default:
+// 			fmt.Println("this element is not any of int, string, Person")
+// 		}
+// 	}
+// 	// go say("world")
+// 	say("hello")
+// 	// ch1 := make(chan int)
+// 	// // go sendData(ch1)
+// 	// // getData(ch1)
+// 	// ch2 := make(chan int)
+// 	// go pump1(ch1)
+// 	// go pump2(ch2)
+// 	// go suck(ch1, ch2)
+// 	// time.Sleep(1 * 1e9)
+// 	f()
+// 	b()
+// 	s := "This is a test"
+// 	fmt.Println(strings.HasPrefix(s, "TH"))
+// 	fmt.Println(strings.HasSuffix(s, "st"))
+// 	fmt.Println(strings.Contains(s, "st"))
+// 	fmt.Println(strings.Index(s, "s"))
+// 	strings.Replace(s, "is", "as", 1)
+// 	fmt.Println(strings.Replace(s, "is", "as", -1))
+// 	fmt.Println(`this is a raw string \n`)
+// }
 
-	TypeSwitch()
-	fmt.Println(reflect.TypeOf(sq1))
-	fmt.Println(reflect.ValueOf(sq1))
-	var x float64 = 3.4
-	v := reflect.ValueOf(&x)
-	v = v.Elem()
-	fmt.Println(v.CanSet())
-	v.SetFloat(3.1415)
-	fmt.Println(v)
+// func say(s string) {
+// 	for i := 0; i < 5; i++ {
+// 		runtime.Gosched()
+// 		fmt.Println(s)
+// 	}
+// }
 
-	t := T{23, "skido"}
-	s := reflect.ValueOf(&t).Elem()
-	typeOfT := s.Type()
-	for i := 0; i < s.NumField(); i++ {
-		f := s.Field(i)
-		fmt.Println(i, typeOfT.Field(i).Name, f.Type(), f.Interface())
-	}
-	s.Field(0).SetInt(77)
-	s.Field(1).SetString("sunset strip")
-	fmt.Println("t is now", t)
+// func pump(ch chan int) {
+// 	for i := 0; i < 10; i++ {
+// 		ch <- i
+// 	}
+// }
 
-	ch := make(chan string, 5)
-	go sendData(ch)
-	// go getData(ch)
-	for {
-		fmt.Println(<-ch)
-	}
+// func sendData(ch chan string) {
+// 	ch <- "w"
+// 	ch <- "t"
+// 	ch <- "l"
+// 	ch <- "b"
+// 	ch <- "t"
+// 	close(ch)
+// }
 
-	// time.Sleep(1e9)
-}
+// func getData(ch chan string) {
+// 	for {
+// 		input, open := <-ch
+// 		if !open {
+// 			break
+// 		}
+// 		fmt.Println("%s", input)
+// 	}
+// }
 
-func (sq *Square) Area() float32 {
-	return sq.side * sq.side
-}
+// func pump1(ch chan int) {
+// 	for i := 0; ; i++ {
+// 		ch <- i * 2
+// 	}
+// }
 
-func (c *Circle) Area() float32 {
-	return c.radius * c.radius * math.Pi
-}
+// func pump2(ch chan int) {
+// 	for i := 0; ; i++ {
+// 		ch <- i + 5
+// 	}
+// }
 
-func sendData(ch chan string) {
-	ch <- "washington"
-	ch <- "Tripoli"
-	ch <- "london"
-	ch <- "beijing"
-	ch <- "tokio"
-}
+// func suck(ch1, ch2 chan int) {
+// 	for {
+// 		select {
+// 		case v := <-ch1:
+// 			fmt.Println("receive from channel 1", v)
+// 		case v := <-ch2:
+// 			fmt.Println("receive from channel 2", v)
+// 		}
+// 	}
+// }
 
-func getData(ch chan string) {
-	for {
-		fmt.Println(<-ch)
-	}
-}
+// func f() {
+// 	for i := 0; i < 5; i++ {
+// 		defer fmt.Println("defer:", i)
+// 	}
+// }
+
+// func trace(s string)   { fmt.Println("entering:", s) }
+// func untrace(s string) { fmt.Println("leaving:", s) }
+
+// func a() {
+// 	trace("a")
+// 	defer untrace("a")
+// 	fmt.Println("in a")
+// }
+
+// func b() {
+// 	trace("b")
+// 	defer untrace("b")
+// 	fmt.Println("in b")
+// 	a()
+// }
