@@ -8,9 +8,11 @@ import (
 
 // Client 创建用户结构体类型
 type Client struct {
-	Name string
-	Addr string
-	C    chan Msg
+	Name    string
+	Addr    string
+	Message chan Msg
+	Quit    chan bool
+	Active  chan bool
 }
 
 // Msg 传递的消息类型
@@ -28,7 +30,7 @@ var message = make(chan Msg)
 // WriteMsgToClient 向客户端写数据
 func WriteMsgToClient(clnt Client, conn net.Conn) {
 	// 监听用户自带channel上是否有消息
-	for msg := range clnt.C {
+	for msg := range clnt.Message {
 		if msg.Addr != clnt.Addr {
 			conn.Write([]byte(msg.Content + "\n"))
 		}
@@ -45,7 +47,7 @@ func MakeMsg(clnt Client, msg string) (buf Msg) {
 func HandlerConnect(conn net.Conn) {
 	defer conn.Close()
 	netAddr := conn.RemoteAddr().String()
-	clnt := Client{netAddr, netAddr, make(chan Msg)}
+	clnt := Client{netAddr, netAddr, make(chan Msg), make(chan bool), make(chan bool)}
 
 	// 将新连接用户, 添加到在线用户map中
 	onlineMap[netAddr] = clnt
@@ -55,19 +57,13 @@ func HandlerConnect(conn net.Conn) {
 	// 发送用户上线消息到全局channel中
 	message <- MakeMsg(clnt, "login")
 
-	// 判断用户是否下线
-	isQuit := make(chan bool)
-
-	// 监听用户是否超时
-	hasData := make(chan bool)
-
 	// 创建go程, 专门处理用户发送的消息
 	go func() {
 		buf := make([]byte, 4096)
 		for {
 			n, err := conn.Read(buf)
 			if n == 0 {
-				isQuit <- true
+				clnt.Quit <- true
 				fmt.Println(clnt.Name, "客户端退出")
 				return
 			}
@@ -89,18 +85,18 @@ func HandlerConnect(conn net.Conn) {
 			} else {
 				message <- MakeMsg(clnt, msg)
 			}
-			hasData <- true
+			clnt.Active <- true
 		}
 	}()
 
 	// 保证不退出
 	for {
 		select {
-		case <-isQuit:
+		case <-clnt.Quit:
 			delete(onlineMap, clnt.Addr)
 			message <- MakeMsg(clnt, "logout")
 			return
-		case <-hasData:
+		case <-clnt.Active:
 		case <-time.After(time.Second * 10):
 			delete(onlineMap, clnt.Addr)
 			message <- MakeMsg(clnt, "logout")
@@ -117,7 +113,7 @@ func Manager() {
 		msg := <-message
 		for _, clnt := range onlineMap {
 			fmt.Println(msg)
-			clnt.C <- msg
+			clnt.Message <- msg
 		}
 	}
 
